@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie de produits · Clair/Sombre</title>
+    <style>
+        /* Variables de thème (clair par défaut) */
+        :root {
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text: #212529;
+            --text-secondary: #6c757d;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --accent: #0d6efd;
+            --accent-hover: #0b5ed7;
+            --card-bg: #ffffff;
+            --transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Thème sombre */
+        body.dark {
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --text: #f1f3f5;
+            --text-secondary: #adb5bd;
+            --border: #2d2d2d;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --card-bg: #242424;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* En‑tête avec le bouton de bascule */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+
+        /* Grille des cartes */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Carte produit */
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 20px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.2s ease;
+            opacity: 0; /* initial pour l'animation de fondu */
+            animation: fadeInUp 0.6s ease forwards;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Délais d'animation pour chaque carte */
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.3s; }
+        .product-card:nth-child(3) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px var(--shadow);
+        }
+
+        .product-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--surface); /* fallback */
+            transition: filter 0.3s ease;
+        }
+
+        /* Images factices (remplacez par vos propres URLs) */
+        .card-1 .product-image {
+            background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&auto=format');
+        }
+        
+        .card-2 .product-image {
+    background-image: url('https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=400&auto=format');
+    background-color: #2c3e50; /* couleur de secours */
+}
+        .card-3 .product-image {
+            background-image: url('https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&auto=format');
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0.5rem 0 0.75rem;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            align-self: flex-start;
+            box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Adaptation mobile */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .theme-toggle {
+                justify-content: center;
+            }
+        }
+
+        /* Petite transition pour le fond */
+        body, .product-card, .theme-toggle, .btn {
+            transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Galerie d'inspiration</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Changer de thème">
+                <span id="themeIcon">🌙</span>
+                <span id="themeText">Mode sombre</span>
+            </button>
+        </div>
+
+        <div class="gallery">
+            <!-- Carte 1 : Casque audio -->
+            <div class="product-card card-1">
+                <div class="product-image"></div>
+                <div class="product-info">
+                    <h2 class="product-title">Casque SX80</h2>
+                    <p class="product-description">Son haute fidélité, réduction de bruit active, autonomie 30h.</p>
+                    <div class="product-price">15 000 FCFA</div>
+                    <button class="btn">Acheter</button>
+                </div>
+            </div>
+
+            <!-- Carte 2 : Montre connectée -->
+            <div class="product-card card-2">
+                <div class="product-image"></div>
+                <div class="product-info">
+                    <h2 class="product-title">Montre Active</h2>
+                    <p class="product-description">Cardio, GPS, écran AMOLED, 5 ATM. Suivi de sommeil intégré.</p>
+                    <div class="product-price">25 000 FCFA</div>
+                    <button class="btn">Acheter</button>
+                </div>
+            </div>
+
+            <!-- Carte 3 : Enceinte nomade -->
+            <div class="product-card card-3">
+                <div class="product-image"></div>
+                <div class="product-info">
+                    <h2 class="product-title">Enceinte Roam</h2>
+                    <p class="product-description">Bluetooth 5.3, 20W, étanche, design compact et robuste.</p>
+                    <div class="product-price">50 000 FCFA</div>
+                    <button class="btn">Acheter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const toggleButton = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+
+            // Vérifier le thème sauvegardé ou la préférence système
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.body.classList.add('dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Mode clair';
+            } else {
+                document.body.classList.remove('dark');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Mode sombre';
+            }
+
+            // Fonction de bascule
+            function toggleTheme() {
+                if (document.body.classList.contains('dark')) {
+                    document.body.classList.remove('dark');
+                    themeIcon.textContent = '🌙';
+                    themeText.textContent = 'Mode sombre';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.body.classList.add('dark');
+                    themeIcon.textContent = '☀️';
+                    themeText.textContent = 'Mode clair';
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+            toggleButton.addEventListener('click', toggleTheme);
+
+            // Écouter les changements de préférence système (optionnel)
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem('theme')) {
+                    // Seulement si l'utilisateur n'a pas forcé un thème
+                    if (e.matches) {
+                        document.body.classList.add('dark');
+                        themeIcon.textContent = '☀️';
+                        themeText.textContent = 'Mode clair';
+                    } else {
+                        document.body.classList.remove('dark');
+                        themeIcon.textContent = '🌙';
+                        themeText.textContent = 'Mode sombre';
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
